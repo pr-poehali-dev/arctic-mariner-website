@@ -50,8 +50,40 @@ const galleryImages = [
   { url: "https://cdn.poehali.dev/projects/9bb8dab8-c3b8-44c8-97dd-020472e97422/files/a2b618d0-31e8-4ced-b987-9188d2cf3d37.jpg", title: "Айсберги Северного Ледовитого океана", description: "Массивные ледяные образования в холодных водах Арктики" }
 ];
 
+const expeditionRoutes = [
+  {
+    name: "Фритьоф Нансен",
+    year: "1893-1896",
+    route: "Норвегия → Новосибирские острова → Дрейф через Арктику",
+    color: "#0EA5E9",
+    description: "Дрейф на 'Фраме' через Северный Ледовитый океан"
+  },
+  {
+    name: "Руаль Амундсен",
+    year: "1903-1906",
+    route: "Гренландия → Канадский архипелаг → Аляска",
+    color: "#8B5CF6",
+    description: "Первое успешное прохождение Северо-Западного прохода"
+  },
+  {
+    name: "Георгий Седов",
+    year: "1912-1914",
+    route: "Архангельск → Новая Земля → Земля Франца-Иосифа",
+    color: "#F97316",
+    description: "Попытка достижения Северного полюса"
+  },
+  {
+    name: "Северный морской путь",
+    year: "1932",
+    route: "Архангельск → Мурманск → Берингов пролив",
+    color: "#10B981",
+    description: "Первое сквозное плавание за одну навигацию"
+  }
+];
+
 export default function Index() {
   const [selectedExplorer, setSelectedExplorer] = useState<number | null>(null);
+  const [selectedRoute, setSelectedRoute] = useState<number>(0);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -91,6 +123,12 @@ export default function Index() {
                 className="text-sm font-semibold hover:text-primary transition-colors"
               >
                 Мореплаватели
+              </button>
+              <button
+                onClick={() => scrollToSection("routes")}
+                className="text-sm font-semibold hover:text-primary transition-colors"
+              >
+                Карта маршрутов
               </button>
             </div>
           </div>
@@ -219,6 +257,90 @@ export default function Index() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="routes" className="py-20 px-4">
+        <div className="container mx-auto">
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-5xl font-bold mb-4">Карта маршрутов экспедиций</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Исторические пути великих арктических путешествий
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 items-start">
+            <div className="bg-card rounded-2xl p-8 shadow-xl border border-border animate-fade-in">
+              <div className="relative w-full aspect-square bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl overflow-hidden">
+                <svg viewBox="0 0 500 500" className="w-full h-full">
+                  <circle cx="250" cy="150" r="120" fill="hsl(var(--background))" stroke="hsl(var(--border))" strokeWidth="2" />
+                  
+                  <path d="M 100 200 Q 150 100 250 150" stroke={expeditionRoutes[selectedRoute].color} strokeWidth="3" fill="none" strokeDasharray="5,5" className="animate-pulse" />
+                  <path d="M 250 150 Q 350 180 400 250" stroke={expeditionRoutes[selectedRoute].color} strokeWidth="3" fill="none" strokeDasharray="5,5" className="animate-pulse" style={{ animationDelay: '0.3s' }} />
+                  <path d="M 400 250 Q 380 320 320 380" stroke={expeditionRoutes[selectedRoute].color} strokeWidth="3" fill="none" strokeDasharray="5,5" className="animate-pulse" style={{ animationDelay: '0.6s' }} />
+                  
+                  <circle cx="100" cy="200" r="8" fill={expeditionRoutes[selectedRoute].color} className="animate-pulse" />
+                  <circle cx="250" cy="150" r="10" fill="hsl(var(--primary))" stroke="white" strokeWidth="2" />
+                  <circle cx="400" cy="250" r="8" fill={expeditionRoutes[selectedRoute].color} className="animate-pulse" style={{ animationDelay: '0.3s' }} />
+                  <circle cx="320" cy="380" r="8" fill={expeditionRoutes[selectedRoute].color} className="animate-pulse" style={{ animationDelay: '0.6s' }} />
+                  
+                  <text x="250" y="140" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="14" fontWeight="bold">Северный полюс</text>
+                  <text x="100" y="190" textAnchor="middle" fill="hsl(var(--foreground))" fontSize="12">Старт</text>
+                  
+                  <g opacity="0.3">
+                    <circle cx="250" cy="150" r="140" fill="none" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="3,3" />
+                    <circle cx="250" cy="150" r="160" fill="none" stroke="hsl(var(--border))" strokeWidth="1" strokeDasharray="3,3" />
+                  </g>
+                  
+                  <path d="M 150 300 L 155 295 L 160 300 M 200 350 L 205 345 L 210 350 M 300 280 L 305 275 L 310 280" stroke="hsl(var(--muted-foreground))" strokeWidth="2" opacity="0.4" />
+                </svg>
+              </div>
+              
+              <div className="mt-6 p-4 bg-primary/10 rounded-lg">
+                <div className="flex items-center gap-3 mb-2">
+                  <Icon name="Ship" size={24} className="text-primary" />
+                  <h3 className="text-xl font-bold">{expeditionRoutes[selectedRoute].name}</h3>
+                </div>
+                <p className="text-sm text-muted-foreground mb-1">
+                  <strong>Период:</strong> {expeditionRoutes[selectedRoute].year}
+                </p>
+                <p className="text-sm text-muted-foreground mb-2">
+                  <strong>Маршрут:</strong> {expeditionRoutes[selectedRoute].route}
+                </p>
+                <p className="text-sm">{expeditionRoutes[selectedRoute].description}</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold mb-6">Выберите экспедицию</h3>
+              {expeditionRoutes.map((route, index) => (
+                <Card
+                  key={index}
+                  className={`cursor-pointer transition-all duration-300 hover:shadow-lg ${
+                    selectedRoute === index ? 'ring-2 ring-primary shadow-xl' : ''
+                  }`}
+                  onClick={() => setSelectedRoute(index)}
+                >
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div
+                        className="w-4 h-4 rounded-full mt-1 flex-shrink-0"
+                        style={{ backgroundColor: route.color }}
+                      ></div>
+                      <div className="flex-1">
+                        <h4 className="text-lg font-bold mb-1">{route.name}</h4>
+                        <p className="text-sm text-primary font-semibold mb-2">{route.year}</p>
+                        <p className="text-sm text-muted-foreground">{route.description}</p>
+                      </div>
+                      {selectedRoute === index && (
+                        <Icon name="Check" size={20} className="text-primary flex-shrink-0" />
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
         </div>
       </section>
